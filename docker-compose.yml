@@ -1,0 +1,46 @@
+services:
+  # O coração do sistema: PHP + Swoole (Hyperf)
+  app:
+    image: hyperf/hyperf:latest
+    container_name: hyperf_app
+    volumes:
+      - .:/data
+    ports:
+      - "9501:9501"
+    environment:
+      - SCAN_CACHEABLE=false
+    networks:
+      - hyperf_network
+    tty: true
+    stdin_open: true
+    command: php /data/bin/hyperf.php start
+
+  # Cassandra: Banco colunar para alta escala
+  cassandra:
+    image: cassandra:latest
+    container_name: hyperf_cassandra
+    ports:
+      - "9042:9042"
+    networks:
+      - hyperf_network
+    environment:
+      - CASSANDRA_CLUSTER_NAME=url_cluster
+    # O Cassandra demora a subir e gasta muita RAM. 
+    # Esses limites ajudam em ambiente de dev:
+    deploy:
+      resources:
+        limits:
+          memory: 1G 
+
+  # Redis: Contador atômico e Cache
+  redis:
+    image: redis:alpine
+    container_name: hyperf_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - hyperf_network
+
+networks:
+  hyperf_network:
+    driver: bridge

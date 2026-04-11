@@ -16,21 +16,14 @@ services:
     command: php /data/bin/hyperf.php start
 
   # Cassandra: Banco colunar para alta escala
-  cassandra:
-    image: cassandra:latest
-    container_name: hyperf_cassandra
+  scylla:
+    image: scylladb/scylla:latest
+    container_name: hyperf_scylla
+    command: --smp 1 --memory 2G --overprovisioned 1 --developer-mode 1
     ports:
       - "9042:9042"
     networks:
       - hyperf_network
-    environment:
-      - CASSANDRA_CLUSTER_NAME=url_cluster
-    # O Cassandra demora a subir e gasta muita RAM. 
-    # Esses limites ajudam em ambiente de dev:
-    deploy:
-      resources:
-        limits:
-          memory: 1G 
 
   # Redis: Contador atômico e Cache
   redis:

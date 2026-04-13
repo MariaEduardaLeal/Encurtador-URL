@@ -4,11 +4,17 @@ Este documento detalha as decisões tomadas durante a configuração do ambiente
 
 ## 1. Time Zone: `America/Sao_Paulo`
 **Por que:** Sistemas distribuídos dependem de precisão temporal.
-**Impacto:** Garante que o campo `created_at` no Cassandra e os logs de cliques no Redis estejam sincronizados com o horário local. Sem isso, cálculos de expiração de URL (ex: expirar em 24h) podem falhar devido ao fuso horário incorreto.
+**Impacto:** Garante que os registros no ScyllaDB e os logs de cliques no Redis estejam sincronizados com o horário local. Sem isso, cálculos de expiração de URL (ex: expirar em 24h) podem falhar devido ao fuso horário incorreto.
 
 ## 2. Database (MySQL Client): `y`
-**Por que:** Mesmo focando no Cassandra, o Hyperf usa essa base para migrations e estruturas de sistema.
-**Impacto:** Permite o uso do Eloquent (ORM do Hyperf) para tabelas auxiliares. É mais eficiente gerenciar metadados simples aqui do que no Cassandra, que é otimizado para volumes massivos de dados.
+**Por que:** Mesmo focando no ScyllaDB, o Hyperf usa essa base para migrations e estruturas de sistema.
+**Impacto:** Permite o uso do Eloquent (ORM do Hyperf) para tabelas auxiliares. É mais eficiente gerenciar metadados simples aqui do que no ScyllaDB, que é otimizado para volumes massivos de dados.
+
+## 3. Database NoSQL: ScyllaDB (Substituindo Cassandra)
+**Decisão:** Substituímos a imagem oficial do Cassandra pelo **ScyllaDB**.
+**Por que:** O Cassandra é escrito em Java e consome muita RAM, o que estava pesando na máquina de desenvolvimento. O ScyllaDB é escrito em C++, é compatível com o protocolo do Cassandra (CQL), mas é muito mais eficiente em termos de CPU e Memória.
+**Configuração de Dev:** Ativado o `--developer-mode 1` e limites de memória para garantir fluidez no PC local.
+**Impacto:** Mantemos a arquitetura colunar de alta performance, mas com um ambiente mais leve.
 
 ## 3. Redis Client: `y`
 **A Decisão Crítica:** O Redis é essencial para a escalabilidade do projeto.
@@ -34,7 +40,7 @@ Este documento detalha as decisões tomadas durante a configuração do ambiente
 
 ## 8. Elasticsearch e Tracer: `n`
 **A Razão:** Foco e economia de recursos.
-**Impacto:** O encurtador busca por chave exata (`short_code`), tarefa na qual o Cassandra é imbatível. Elasticsearch seria redundante. O Tracer (Zipkin) seria monitoramento excessivo para a fase inicial, consumindo CPU desnecessariamente.
+**Impacto:** O encurtador busca por chave exata (`short_code`), tarefa na qual o ScyllaDB é imbatível. Elasticsearch seria redundante. O Tracer (Zipkin) seria monitoramento excessivo para a fase inicial, consumindo CPU desnecessariamente.
 
 ## 9. Pest PHP: `y`
 **Por que:** Aplicação de conceitos de SOLID e Clean Code.

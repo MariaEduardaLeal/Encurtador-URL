@@ -1,63 +1,59 @@
-# Introduction
+# Encurtador de URL (Shortcut)
 
-This is a skeleton application using the Hyperf framework. This application is meant to be used as a starting place for those looking to get their feet wet with Hyperf Framework.
+Este é um projeto de alta performance para encurtamento de URLs, desenvolvido com o framework Hyperf (PHP/Swoole), PostgreSQL e Redis.
 
-# Requirements
+## 🚀 Arquitetura e Tecnologias
 
-Hyperf has some requirements for the system environment, it can only run under Linux and Mac environment, but due to the development of Docker virtualization technology, Docker for Windows can also be used as the running environment under Windows.
+- **PHP 8.4 (Swoole)**: Motor de execução em memória residente para baixa latência.
+- **Hyperf 3.1**: Framework otimizado para microserviços e alta concorrência.
+- **PostgreSQL 16**: Banco de dados relacional para persistência definitiva das URLs.
+- **Redis (Alpine)**: Utilizado para cache de modelos e controle de contadores atômicos para geração de IDs.
+- **Docker/Docker-compose**: Ambiente totalmente conteinerizado para facilitar o setup.
 
-The various versions of Dockerfile have been prepared for you in the [hyperf/hyperf-docker](https://github.com/hyperf/hyperf-docker) project, or directly based on the already built [hyperf/hyperf](https://hub.docker.com/r/hyperf/hyperf) Image to run.
+## 📋 Requisitos
 
-When you don't want to use Docker as the basis for your running environment, you need to make sure that your operating environment meets the following requirements:  
+- Docker
+- Docker Compose
 
- - PHP >= 8.1
- - Any of the following network engines
-   - Swoole PHP extension >= 5.0，with `swoole.use_shortname` set to `Off` in your `php.ini`
-   - Swow PHP extension >= 1.3
- - JSON PHP extension
- - Pcntl PHP extension
- - OpenSSL PHP extension （If you need to use the HTTPS）
- - PDO PHP extension （If you need to use the MySQL Client）
- - Redis PHP extension （If you need to use the Redis Client）
- - Protobuf PHP extension （If you need to use the gRPC Server or Client）
+## 🛠️ Instalação e Setup
 
-# Installation using Composer
+1. **Clonar o Repositório**:
+   ```bash
+   git clone <url-do-repositorio>
+   cd encurtador_url
+   ```
 
-The easiest way to create a new Hyperf project is to use [Composer](https://getcomposer.org/). If you don't have it already installed, then please install as per [the documentation](https://getcomposer.org/download/).
+2. **Configurar Ambiente**:
+   ```bash
+   cp .env.example .env
+   ```
 
-To create your new Hyperf project:
+3. **Subir os Containers**:
+   ```bash
+   docker-compose up -d
+   ```
 
-```bash
-composer create-project hyperf/hyperf-skeleton path/to/install
-```
+4. **Instalar Dependências (se não automático)**:
+   ```bash
+   docker exec -it hyperf_app composer install
+   ```
 
-If your development environment is based on Docker you can use the official Composer image to create a new Hyperf project:
+## 🚦 Como Usar
 
-```bash
-docker run --rm -it -v $(pwd):/app composer create-project --ignore-platform-reqs hyperf/hyperf-skeleton path/to/install
-```
+Assim que os containers estiverem rodando, a aplicação estará disponível em `http://localhost:9501`.
 
-# Getting started
+### Endpoints Principais (Exemplo)
 
-Once installed, you can run the server immediately using the command below.
+- `POST /encode`: Envia uma URL longa e recebe o código encurtado.
+- `GET /{short_code}`: Redireciona para a URL original.
 
-```bash
-cd path/to/install
-php bin/hyperf.php start
-```
+## 📖 Documentação Adicional
 
-Or if in a Docker based environment you can use the `docker-compose.yml` provided by the template:
+Para entender mais sobre as decisões técnicas e o funcionamento interno, consulte a pasta `docs/`:
+- [Conceitos Técnicos](docs/conceitos_tecnicos.md)
+- [Configurações Docker](docs/configuracoes_docker_terminal.md)
+- [Guia de Início Rápido](docs/configuracoes_iniciais.md)
 
-```bash
-cd path/to/install
-docker-compose up
-```
+---
+Developed with ❤️ by Maria Eduarda.
 
-This will start the cli-server on port `9501`, and bind it to all network interfaces. You can then visit the site at `http://localhost:9501/` which will bring up Hyperf default home page.
-
-## Hints
-
-- A nice tip is to rename `hyperf-skeleton` of files like `composer.json` and `docker-compose.yml` to your actual project name.
-- Take a look at `config/routes.php` and `app/Controller/IndexController.php` to see an example of a HTTP entrypoint.
-
-**Remember:** you can always replace the contents of this README.md file to something that fits your project description.

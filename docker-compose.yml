@@ -1,10 +1,13 @@
 services:
   # O coração do sistema: PHP + Swoole (Hyperf)
   app:
-    image: hyperf/hyperf:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: hyperf_app
     volumes:
-      - .:/data
+      # Mapeamento atualizado para o padrão do Dockerfile
+      - ./:/opt/www
     ports:
       - "9501:9501"
     environment:
@@ -13,15 +16,18 @@ services:
       - hyperf_network
     tty: true
     stdin_open: true
-    command: php /data/bin/hyperf.php start
+    command: php bin/hyperf.php start
 
-  # Cassandra: Banco colunar para alta escala
-  scylla:
-    image: scylladb/scylla:latest
-    container_name: hyperf_scylla
-    command: --smp 1 --memory 2G --overprovisioned 1 --developer-mode 1
+  # PostgreSQL: O substituto de elite para o banco de dados
+  postgres:
+    image: postgres:16-alpine
+    container_name: hyperf_postgres
+    environment:
+      POSTGRES_USER: hyperf
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: url_shortener
     ports:
-      - "9042:9042"
+      - "5432:5432"
     networks:
       - hyperf_network
 

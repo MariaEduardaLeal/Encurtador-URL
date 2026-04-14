@@ -51,6 +51,7 @@ Assim que os containers estiverem rodando, a aplicação estará disponível em 
 
 Para entender mais sobre as decisões técnicas e o funcionamento interno, consulte a pasta `docs/`:
 - [Conceitos Técnicos](docs/conceitos_tecnicos.md)
+- [Padrão Repository](docs/padrao_repository.md)
 - [Configurações Docker](docs/configuracoes_docker_terminal.md)
 - [Guia de Início Rápido](docs/configuracoes_iniciais.md)
 

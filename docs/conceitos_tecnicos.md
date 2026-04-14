@@ -19,9 +19,9 @@ No Swoole/Hyperf, as coisas acontecem através de **Corrotinas** (tarefas leves 
 
 1.  Uma corrotina abre uma conexão.
 2.  Outra corrotina abre outra.
-3.  Em milissegundos, você terá milhares de "mãos" tentando abrir a porta do ScyllaDB ao mesmo tempo.
+3.  Em milissegundos, você terá milhares de "mãos" tentando abrir a porta do PostgreSQL ao mesmo tempo.
 
-O ScyllaDB acabará gastando toda a sua CPU apenas para processar o processo de "Login/Senha" de cada conexão, e não sobrará força para a tarefa principal: salvar as URLs.
+O PostgreSQL acabará gastando toda a sua CPU apenas para processar o processo de "Login/Senha" de cada conexão, e não sobrará força para a tarefa principal: salvar as URLs.
 
 ## 3. Estratégias de Gerenciamento: Singleton vs. Connection Pool
 
@@ -40,7 +40,7 @@ Para evitar o caos das milhares de conexões, utilizamos padrões de projeto esp
 2.  Ela realiza a query.
 3.  Ela "devolve" a conexão para o Pool.
 
-**Vantagem**: O login no ScyllaDB é feito apenas uma vez (quando o servidor liga). Depois disso, temos apenas tráfego de dados puro, garantindo estabilidade e velocidade.
+**Vantagem**: O login no PostgreSQL é feito apenas uma vez (quando o servidor liga). Depois disso, temos apenas tráfego de dados puro, garantindo estabilidade e velocidade.
 
 ---
 *Documento focado em explicar a base teórica que torna o Hyperf uma escolha poderosa para microserviços.*

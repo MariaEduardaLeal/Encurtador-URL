@@ -12,3 +12,5 @@ Router::get('/favicon.ico', function () {
 
 // A nossa API de criação
 Router::post('/api/v1/shorten', [UrlController::class, 'shorten']);
+
+Router::get('/{shortCode}', [UrlController::class, 'redirect']);

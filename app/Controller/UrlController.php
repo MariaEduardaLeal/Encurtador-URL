@@ -29,10 +29,24 @@ class UrlController
         return $this->response->json([
             'success' => true,
             'data' => [
-                'short_url' => env('APP_URL', 'http://localhost:9501') . '/' . $shortCode,
+                'short_url' => \Hyperf\Support\env('APP_URL', 'http://localhost:9501') . '/' . $shortCode,
                 'short_code' => $shortCode,
                 'original_url' => $longUrl
             ]
         ])->withStatus(201);
+    }
+
+    public function redirect(string $shortCode)
+    {
+        $longUrl = $this->repository->findByCode($shortCode);
+
+        if (!$longUrl) {
+            return $this->response->json([
+                'success' => false,
+                'message' => 'URL não encontrada ou expirada'
+            ])->withStatus(404);
+        }
+
+        return $this->response->redirect($longUrl, 302);
     }
 }
